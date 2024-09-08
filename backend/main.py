@@ -60,7 +60,7 @@ def get_conversation():
             {
               "summary": "The summary of the conversation",
               "criticality": "The criticality of the call(eg. high, medium, low)",
-              "isSpam": "True or False",
+              "isSpam": "Yes" or "No",
               "department": "Department name(Fire, Police, Medical)",
               "user": "User name (Unknown if not provided)",
               "location": "User location (Unknown if not provided)"
@@ -74,7 +74,7 @@ def get_conversation():
       
       ], model='llama3-8b-8192',stream=False)
     print(chat_summary.choices[0].message.content)
-    json_data = json.loads(chat_summary.choices[0].message.content)
+    json_data = json.loads(chat_summary.choices[0].message.content.strip().strip())
     conn = sqlite3.connect('conversation.db')
     c = conn.cursor()
     c.execute("INSERT INTO conversations VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (str(uuid.uuid4()), conversations, str(uuid.uuid4()), json_data["summary"], json_data["criticality"], json_data["isSpam"], json_data["user"], json_data["location"]))
